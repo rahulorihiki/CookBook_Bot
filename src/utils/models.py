@@ -3,25 +3,31 @@ from src.utils.helpers import show_ingredients, go_back, next_step, repeat_step,
 class State:
     def __init__(self, data):
         self.data = data
-        self.current_step = 0
+        self.step_counter = 0
 
-    def get_current_step(self):
-        return self.data['steps'][self.current_step]
+    def _update_step_counter(self, new_step):
+        """Safely update the step counter based on bounds."""
+        if 0 <= new_step < len(self.data['steps']):
+            self.step_counter = new_step
+        else:
+            return "Step not available."
+        return self.active_step()
 
-    def next_step(self):
-        if self.current_step < len(self.data['steps']) - 1:
-            self.current_step += 1
-        return self.get_current_step()
+    def active_step(self):
+        """Return the current active step."""
+        return self.data['steps'][self.step_counter]
 
-    def previous_step(self):
-        if self.current_step > 0:
-            self.current_step -= 1
-        return self.get_current_step()
+    def next(self):
+        """Move to the next step if possible."""
+        return self._update_step_counter(self.step_counter + 1)
 
-    def go_to_step(self, step_number):
-        if 0 <= step_number < len(self.data['steps']):
-            self.current_step = step_number
-        return self.get_current_step()
+    def previous(self):
+        """Move to the previous step if possible."""
+        return self._update_step_counter(self.step_counter - 1)
+
+    def jump_to_step(self, step_number):
+        """Jump to a specific step number."""
+        return self._update_step_counter(step_number)
 
 
 class CommandHandler:

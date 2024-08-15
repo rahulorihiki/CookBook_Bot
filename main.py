@@ -46,7 +46,7 @@ def cookbook_bot():
 
     while True:
 
-        query = input("Q) How can I assist you? \n")
+        query = input("Q) How may I help you? \n")
         logger.info(f"User asked: {query}")
         if "exit" in query.lower():
             break
