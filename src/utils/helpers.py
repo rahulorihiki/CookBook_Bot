@@ -3,6 +3,9 @@ import re
 def show_ingredients(state,query):
     return state.data['ingredients']
 
+def show_tools(state,query):
+    return state.data['tools']
+
 def go_back(state,query):
     return state.previous()
 

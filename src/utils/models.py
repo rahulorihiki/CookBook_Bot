@@ -1,4 +1,4 @@
-from src.utils.helpers import show_ingredients, go_back, next_step, repeat_step, go_to_step, ingredient_quantity, what_is, how_to, how_to_do_that
+from src.utils.helpers import show_ingredients, go_back, next_step, repeat_step, go_to_step, ingredient_quantity, what_is, how_to, how_to_do_that, show_tools
 
 class State:
     def __init__(self, data):
@@ -34,12 +34,13 @@ class CommandHandler:
     def __init__(self):
         self.commands = {
             "go over all the ingredients": show_ingredients,
+            "go over all the tools": show_tools,
             "show previous step": go_back,
             "show next step": next_step,
             "show this step again": repeat_step,
             "take me to the": go_to_step,
             "how much": ingredient_quantity,
-            "what is a": what_is,
+            "what is": what_is,
             "how do i do that": how_to_do_that,
             "how do i": how_to
         }

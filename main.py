@@ -49,6 +49,8 @@ def cookbook_bot():
         query = input("Q) How may I help you? \n")
         logger.info(f"User asked: {query}")
         if "exit" in query.lower():
+            logger.info("User chose to exit the program")
+            print("Exiting the program, Thank you for using the cookbook bot!")
             break
         response = handler.handle(state, query)
         print()
