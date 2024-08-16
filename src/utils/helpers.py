@@ -27,11 +27,11 @@ def ingredient_quantity(state, query):
     return "Ingredient not found."
 
 def what_is(state, query):
-    name = re.search(r'what is a (.+)', query).group(1)
+    name = re.search(r'what is (.+)', query).group(1)
     return f"https://www.google.com/search?q=what+is+a+{name.replace(' ', '+')}"
 
 def how_to(state, query):
-    method = re.search(r'how do i (.+)', query).group(1)
+    method = re.search(r'how to(.+)', query).group(1)
     return f"https://www.youtube.com/results?search_query=how+do+i+{method.replace(' ', '+')}"
 
 def how_to_do_that(state, query):
