@@ -35,6 +35,43 @@ class State:
 
 
 # Using spacy ka averaged word embeddings method
+# class CommandHandler:
+#     def __init__(self):
+#         self.commands = {
+#             "go over all the ingredients": show_ingredients,
+#             "go over all the tools": show_tools,
+#             "show previous step": go_back,
+#             "show next step": next_step,
+#             "show this step again": repeat_step,
+#             "take me to the": go_to_step,
+#             "how much": ingredient_quantity,
+#             "what is": what_is,
+#             "how do i do that": how_to_do_that,
+#             "how do i": how_to
+#         }
+#         # Pre-compute the vectors for each command
+#         self.command_vectors = {cmd: nlp(cmd) for cmd in self.commands}
+
+#     def handle(self, state, query):
+#         # Convert the user's query to a spaCy doc to compute its vector
+#         query_doc = nlp(query.lower())
+        
+#         # Find the command with the highest similarity to the user's query
+#         best_match, best_score = None, 0
+#         for command, cmd_doc in self.command_vectors.items():
+#             score = query_doc.similarity(cmd_doc)
+#             if score > best_score:
+#                 best_match, best_score = command, score
+        
+#         # Threshold to determine if a match is good enough (tune as needed)
+#         if best_score > 0.7:  # This threshold can be adjusted based on empirical testing
+#             return self.commands[best_match](state, query)
+        
+#         return "Sorry, I didn't understand that question."
+
+# It is working better but is still not that accurate.
+from sentence_transformers import SentenceTransformer, util
+
 class CommandHandler:
     def __init__(self):
         self.commands = {
@@ -49,22 +86,18 @@ class CommandHandler:
             "how do i do that": how_to_do_that,
             "how do i": how_to
         }
-        # Pre-compute the vectors for each command
-        self.command_vectors = {cmd: nlp(cmd) for cmd in self.commands}
+        self.model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
+        self.command_embeddings = {cmd: self.model.encode(cmd) for cmd in self.commands}
 
     def handle(self, state, query):
-        # Convert the user's query to a spaCy doc to compute its vector
-        query_doc = nlp(query.lower())
-        
-        # Find the command with the highest similarity to the user's query
+        query_embedding = self.model.encode(query.lower())
         best_match, best_score = None, 0
-        for command, cmd_doc in self.command_vectors.items():
-            score = query_doc.similarity(cmd_doc)
+        for command, cmd_embedding in self.command_embeddings.items():
+            score = util.pytorch_cos_sim(query_embedding, cmd_embedding)
             if score > best_score:
                 best_match, best_score = command, score
-        
-        # Threshold to determine if a match is good enough (tune as needed)
-        if best_score > 0.7:  # This threshold can be adjusted based on empirical testing
+
+        if best_score > 0.4:  # Adjust threshold as needed
             return self.commands[best_match](state, query)
-        
+
         return "Sorry, I didn't understand that question."
