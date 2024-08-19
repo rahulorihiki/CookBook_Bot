@@ -16,23 +16,40 @@ def repeat_step(state,query):
     return state.active_step()
 
 def go_to_step(state, query):
-    num = int(re.search(r'\d+', query).group())
-    return state.jump_to_step(num - 1)
+    try:
+        num = int(re.search(r'\d+', query).group())
+        return state.jump_to_step(num - 1)
+    except Exception as e:
+        print("1")
+        return "Sorry, something went wrong."
 
 def ingredient_quantity(state, query):
-    name = re.search(r'how much of (.+) do i need', query).group(1)
-    for ingredient in state.data['ingredients']:
-        if name in ingredient:
-            return ingredient
-    return "Ingredient not found."
+    try:
+        name = re.search(r'how much (?:of\s)?(\w+)', query).group(1)
+        print(name)
+        for ingredient in state.data['ingredients']:
+            if name in ingredient:
+                return ingredient
+        return "Ingredient not found."
+    except Exception as e:
+        print("2")
+        return "Sorry, something went wrong."
 
 def what_is(state, query):
-    name = re.search(r'what is (.+)', query).group(1)
-    return f"https://www.google.com/search?q=what+is+a+{name.replace(' ', '+')}"
+    try:
+        name = re.search(r'what is (.+)', query).group(1)
+        return f"https://www.google.com/search?q=what+is+a+{name.replace(' ', '+')}"
+    except Exception as e:
+        print("3")
+        return "Sorry, something went wrong."
 
 def how_to(state, query):
-    method = re.search(r'how to(.+)', query).group(1)
-    return f"https://www.youtube.com/results?search_query=how+do+i+{method.replace(' ', '+')}"
+    try:
+        method = re.search(r'how to(.+)', query).group(1)
+        return f"https://www.youtube.com/results?search_query=how+do+i+{method.replace(' ', '+')}"
+    except Exception as e:
+        print("4")
+        return "Sorry, something went wrong."
 
 def how_to_do_that(state, query):
     current = state.active_step()
