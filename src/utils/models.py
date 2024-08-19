@@ -34,28 +34,7 @@ class State:
         return self._update_step_counter(step_number)
 
 
-# class CommandHandler:
-#     def __init__(self):
-#         self.commands = {
-#             "go over all the ingredients": show_ingredients,
-#             "go over all the tools": show_tools,
-#             "show previous step": go_back,
-#             "show next step": next_step,
-#             "show this step again": repeat_step,
-#             "take me to the": go_to_step,
-#             "how much": ingredient_quantity,
-#             "what is": what_is,
-#             "how do i do that": how_to_do_that,
-#             "how do i": how_to
-#         }
-
-#     def handle(self, state, query):
-#         query = query.lower()
-#         for key, command in self.commands.items():
-#             if key in query:
-#                 return command(state, query)
-#         return "Sorry, I didn't understand that question."
-
+# Using spacy ka averaged word embeddings method
 class CommandHandler:
     def __init__(self):
         self.commands = {
